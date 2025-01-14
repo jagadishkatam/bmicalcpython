@@ -4,7 +4,7 @@ import streamlit.web.bootstrap
 import pandas as pd
 from streamlit.web import cli as stcli
 import sys
-import statsmodels.api as sm
+#import statsmodels.api as sm
 # from PIL import image
 
 st.title('BMI Calculator')
