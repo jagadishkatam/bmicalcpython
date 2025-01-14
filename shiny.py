@@ -4,16 +4,16 @@ import streamlit.web.bootstrap
 import pandas as pd
 from streamlit.web import cli as stcli
 import sys
-#import statsmodels.api as sm
+import statsmodels.api as sm
 # from PIL import image
 
 st.title('BMI Calculator')
 st.sidebar.markdown("## User Inputs")
-age = st.sidebar.slider('Age',0,100,40)
+age = st.sidebar.slider('Age',0,100,39)
 gender = st.sidebar.radio('Gender',['Male','Female'])
 height = st.sidebar.number_input('Height in cm', placeholder='in cm', value=170)
-weight = st.sidebar.number_input('Weight in kg', placeholder='in kg', value=73)
-
+weight = st.sidebar.number_input('Weight in kg', placeholder='in kg', value=88)
+waist = st.sidebar.number_input('Waist in cm', placeholder='in cm', value=36)
 
 code = """
 # code used to calculate the BMI
@@ -72,12 +72,38 @@ def classify_bmi_with_age_gender(bmi, gender, age):
             return "Overweight"
         else:
             return "Obesity"
+        
+            # Add waist size consideration
+def waist_risk_assessment(gender, waist_cm):
+    """Assess waist risk based on gender and waist size."""
+    waist_risk = ""
+
+    if gender.lower() == "male":
+        if waist_cm > 102:
+            waist_risk = "High risk"
+        elif waist_cm > 94:
+            waist_risk = "Increased risk"
+        else:
+            waist_risk = "Low risk"
+
+    elif gender.lower() == "female":
+        if waist_cm > 88:
+            waist_risk = "High risk"
+        elif waist_cm > 80:
+            waist_risk = "Increased risk"
+        else:
+            waist_risk = "Low risk"
+
+    return waist_risk
+
 
 
 if st.sidebar.button('Submit'):
     bmi = weight/((height/100)**2)
     st.text("Your BMI Index is {0:.3}.".format(bmi))
     bmi_category = classify_bmi_with_age_gender(bmi, gender, age)
-    # print(bmi_category)
+    waist_r = waist_risk_assessment(gender, waist)
+    # st.text("Your waist is {0:.3}".format(waist) )
+    st.write(f"Waist size is **{waist}**, so the risk is **{waist_r}**")
 
 
