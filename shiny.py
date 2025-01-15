@@ -4,7 +4,7 @@ import streamlit.web.bootstrap
 import pandas as pd
 from streamlit.web import cli as stcli
 import sys
-#import statsmodels.api as sm
+import statsmodels.api as sm
 # from PIL import image
 
 st.title('BMI Calculator')
@@ -45,22 +45,22 @@ def classify_bmi_with_age_gender(bmi, gender, age):
     if age >= 18:
         if gender == "male":
             if bmi < 18.5:
-                return st.image("bmi1.png", caption="Underweight")
+                return col1.image("bmi1.png", caption="Underweight")
             elif 18.5 <= bmi < 25:
-                return st.image("bmi2.png", caption="Normal weight")
+                return col1.image("bmi2.png", caption="Normal weight")
             elif 25 <= bmi < 30:
-                return st.image("bmi3.png", caption="Overweight")
+                return col1.image("bmi3.png", caption="Overweight")
             else:
-                return st.image("bmi4.png", caption="Obesity")
+                return col1.image("bmi4.png", caption="Obesity")
         else:  # Female
             if bmi < 18.0:
-                return st.image("wbmi1.png", caption="Underweight")
+                return col1.image("wbmi1.png", caption="Underweight")
             elif 18.0 <= bmi < 24:
-                return st.image("wbmi2.png", caption="Normal weight")
+                return col1.image("wbmi2.png", caption="Normal weight")
             elif 24 <= bmi < 29:
-                return st.image("wbmi3.png", caption="Overweight")
+                return col1.image("wbmi3.png", caption="Overweight")
             else:
-                return st.image("wbmi4.png", caption="Obesity")
+                return col1.image("wbmi4.png", caption="Obesity")
 
     # Children and teens classification (<18 years)
     else:
@@ -96,14 +96,20 @@ def waist_risk_assessment(gender, waist_cm):
 
     return waist_risk
 
-
+# col1, col2 = st.columns(2)
 
 if st.sidebar.button('Submit'):
     bmi = weight/((height/100)**2)
-    st.text("Your BMI Index is {0:.3}.".format(bmi))
-    bmi_category = classify_bmi_with_age_gender(bmi, gender, age)
+    col1, col2 = st.columns(2)
+    col1.bmi_category = classify_bmi_with_age_gender(bmi, gender, age)
+    col2.text(" ")
+    col2.text(" ")
+    col2.text(" ")
+    col2.text(" ")
+    col2.text("Your BMI Index is {0:.3}.".format(bmi))
+    
     waist_r = waist_risk_assessment(gender, waist)
     # st.text("Your waist is {0:.3}".format(waist) )
-    st.write(f"Waist size is **{waist}**, so the risk is **{waist_r}**")
+    col2.write(f"Waist size is **{waist}**, so the risk is **{waist_r}**")
 
 
